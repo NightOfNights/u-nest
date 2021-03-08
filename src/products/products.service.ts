@@ -6,11 +6,9 @@ import { products as ProductModel, Prisma } from '@prisma/client';
 export class ProductsService {
   constructor(private prisma: PrismaService) {}
 
-  async product(
-    productWhereUniqueInput: Prisma.productsWhereUniqueInput,
-  ): Promise<ProductModel> {
+  async product(where: Prisma.productsWhereUniqueInput): Promise<ProductModel> {
     return this.prisma.products.findUnique({
-      where: productWhereUniqueInput,
+      where,
     });
   }
 
@@ -28,6 +26,20 @@ export class ProductsService {
       cursor,
       where,
       orderBy,
+    });
+  }
+
+  async createProduct(data: Prisma.productsCreateInput): Promise<ProductModel> {
+    return this.prisma.products.create({
+      data,
+    });
+  }
+
+  async deleteProduct(
+    where: Prisma.productsWhereUniqueInput,
+  ): Promise<ProductModel> {
+    return this.prisma.products.delete({
+      where,
     });
   }
 }
