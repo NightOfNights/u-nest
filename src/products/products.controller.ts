@@ -12,6 +12,7 @@ import { ProductsService } from './products.service';
 import { products as ProductModel } from '@prisma/client';
 import { Response } from 'express';
 import { ApiProperty } from '@nestjs/swagger';
+
 class productBody {
   @ApiProperty({
     description: 'Product name',
