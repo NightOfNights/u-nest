@@ -48,4 +48,10 @@ export class CartService {
   async deleteCart(): Promise<Prisma.BatchPayload> {
     return this.prisma.cart.deleteMany();
   }
+
+  async deleteCartProduct(
+    where: Prisma.cartWhereUniqueInput,
+  ): Promise<CartModel> {
+    return this.prisma.cart.delete({ where });
+  }
 }

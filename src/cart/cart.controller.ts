@@ -44,4 +44,11 @@ export class CartController {
   async deleteCart() {
     return this.cartService.deleteCart();
   }
+
+  @Delete('/:id')
+  async deleteCartProduct(@Param('id') id: string): Promise<CartModel> {
+    return this.cartService.deleteCartProduct({
+      productId_userId: { productId: Number(id), userId: 1 },
+    });
+  }
 }
