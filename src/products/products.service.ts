@@ -35,6 +35,17 @@ export class ProductsService {
     });
   }
 
+  async updateProduct(params: {
+    where: Prisma.productsWhereUniqueInput;
+    data: Prisma.productsUpdateInput;
+  }): Promise<ProductModel> {
+    const { where, data } = params;
+    return this.prisma.products.update({
+      data,
+      where,
+    });
+  }
+
   async deleteProduct(
     where: Prisma.productsWhereUniqueInput,
   ): Promise<ProductModel> {

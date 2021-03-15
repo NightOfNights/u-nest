@@ -7,6 +7,7 @@ import {
   Res,
   HttpStatus,
   Body,
+  Put,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { products as ProductModel } from '@prisma/client';
@@ -84,6 +85,27 @@ export class ProductsController {
       rating,
       description,
       imageSrc,
+    });
+  }
+
+  @Put('/:id')
+  async updateProduct(
+    @Body()
+    body: productBody,
+    @Param('id') id: string,
+  ): Promise<ProductModel> {
+    const { name, price, rating, description, imageSrc } = body;
+    return this.productsService.updateProduct({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+        price,
+        rating,
+        description,
+        imageSrc,
+      },
     });
   }
 
