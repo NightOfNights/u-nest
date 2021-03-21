@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Put, Delete } from '@nestjs/common';
-import { cart as CartModel } from '@prisma/client';
+import { cart as CartModel, Prisma } from '@prisma/client';
 import { CartService } from './cart.service';
 import { ProductInfoCartModel } from './cart.service';
 
@@ -7,14 +7,22 @@ import { ProductInfoCartModel } from './cart.service';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Get()
-  async getCart(): Promise<ProductInfoCartModel[]> {
-    return this.cartService.cartWithProductsInfo();
+  @Get('/:userId')
+  async getCart(
+    @Param('userId') userId: string,
+  ): Promise<ProductInfoCartModel[]> {
+    return this.cartService.cartWithProductsInfo(Number(userId));
   }
 
-  @Put('/:id')
-  async updateCart(@Param('id') id: string): Promise<CartModel> {
-    const productUserId = { productId: Number(id), userId: 1 };
+  @Put('/:userId/product/:productId')
+  async updateCart(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+  ): Promise<CartModel> {
+    const productUserId = {
+      productId: Number(productId),
+      userId: Number(userId),
+    };
 
     const cartProduct = await this.cartService.cartProduct({
       productId_userId: productUserId,
@@ -33,22 +41,30 @@ export class CartController {
       });
     } else {
       return this.cartService.createCartProduct({
-        products: { connect: { id: Number(id) } },
+        products: { connect: { id: Number(productId) } },
         amount: 1,
-        users: { connect: { id: 1 } },
+        users: { connect: { id: Number(userId) } },
       });
     }
   }
 
-  @Delete()
-  async deleteCart() {
-    return this.cartService.deleteCart();
+  @Delete('/:userId')
+  async deleteCart(
+    @Param('userId') userId: string,
+  ): Promise<Prisma.BatchPayload> {
+    return this.cartService.deleteCart({ userId: Number(userId) });
   }
 
-  @Delete('/:id')
-  async deleteCartProduct(@Param('id') id: string): Promise<CartModel> {
+  @Delete('/:userId/product/:productId')
+  async deleteCartProduct(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+  ): Promise<CartModel> {
     return this.cartService.deleteCartProduct({
-      productId_userId: { productId: Number(id), userId: 1 },
+      productId_userId: {
+        productId: Number(productId),
+        userId: Number(userId),
+      },
     });
   }
 }

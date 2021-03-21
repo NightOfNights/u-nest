@@ -14,7 +14,7 @@ import { products as ProductModel } from '@prisma/client';
 import { Response } from 'express';
 import { ApiProperty } from '@nestjs/swagger';
 
-class productBody {
+class ProductBody {
   @ApiProperty({
     description: 'Product name',
     default: 'Cat10',
@@ -76,7 +76,7 @@ export class ProductsController {
   @Post()
   async createProduct(
     @Body()
-    body: productBody,
+    body: ProductBody,
   ): Promise<ProductModel> {
     const { name, price, rating, description, imageSrc } = body;
     return this.productsService.createProduct({
@@ -91,7 +91,7 @@ export class ProductsController {
   @Put('/:id')
   async updateProduct(
     @Body()
-    body: productBody,
+    body: ProductBody,
     @Param('id') id: string,
   ): Promise<ProductModel> {
     const { name, price, rating, description, imageSrc } = body;

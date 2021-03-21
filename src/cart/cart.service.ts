@@ -20,13 +20,9 @@ export class CartService {
     });
   }
 
-  async cart(): Promise<CartModel[]> {
-    return this.prisma.cart.findMany();
-  }
-
-  async cartWithProductsInfo(): Promise<ProductInfoCartModel[]> {
+  async cartWithProductsInfo(userId: number): Promise<ProductInfoCartModel[]> {
     return this.prisma.$queryRaw(
-      'SELECT p.id, p.name, p.price, p."imageSrc", c.amount FROM products p JOIN cart c on p.id = c."productId"',
+      `SELECT p.id, p.name, p.price, p."imageSrc", c.amount FROM products p JOIN cart c on p.id = c."productId" WHERE "userId" = ${userId}`,
     );
   }
 
@@ -45,8 +41,8 @@ export class CartService {
     });
   }
 
-  async deleteCart(): Promise<Prisma.BatchPayload> {
-    return this.prisma.cart.deleteMany();
+  async deleteCart(where: Prisma.cartWhereInput): Promise<Prisma.BatchPayload> {
+    return this.prisma.cart.deleteMany({ where });
   }
 
   async deleteCartProduct(

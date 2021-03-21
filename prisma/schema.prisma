@@ -28,9 +28,8 @@ model products {
 }
 
 model users {
-  id       Int    @id @default(autoincrement())
-  username String @unique @db.VarChar(20)
-  password String
-  email    String @unique
-  cart     cart[]
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  role  String @default("user")
+  cart  cart[]
 }
