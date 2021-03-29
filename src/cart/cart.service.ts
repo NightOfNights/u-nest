@@ -14,6 +14,10 @@ export type ProductInfoCartModel = {
 export class CartService {
   constructor(private prisma: PrismaService) {}
 
+  async cart(): Promise<CartModel[]> {
+    return this.prisma.cart.findMany({});
+  }
+
   async cartProduct(where: Prisma.cartWhereUniqueInput): Promise<CartModel> {
     return this.prisma.cart.findUnique({
       where,

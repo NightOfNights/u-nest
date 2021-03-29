@@ -7,6 +7,11 @@ import { ProductInfoCartModel } from './cart.service';
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
+  @Get()
+  async getCartFull(): Promise<CartModel[]> {
+    return this.cartService.cart();
+  }
+
   @Get('/:userId')
   async getCart(
     @Param('userId') userId: string,
